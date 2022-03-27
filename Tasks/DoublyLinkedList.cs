@@ -9,21 +9,24 @@ namespace Tasks
     public class LinkedListEnumerator<T> : IEnumerator<T>
     {
         private Node<T> current;
-
+        private int preserverFromIncreseindex = 0;
         public LinkedListEnumerator(Node<T> current)
         {
             this.current = current;
+            
+            
         }
 
         public T Current => current.data;
 
-        object IEnumerator.Current => Current;
+        object IEnumerator.Current =>  Current ;
 
         public bool MoveNext()
         {
+            if(preserverFromIncreseindex == 0) { preserverFromIncreseindex++; return true; }
             if (current == null) return false;
             current = current.next;
-            return (current != null);
+            return current!=null;
         }
 
         public void Dispose()
@@ -40,12 +43,13 @@ namespace Tasks
     {
         public T data { get; }
         public Node<T> next { get; set; }
+        public Node<T> previous { get; set; }
 
         public Node(T value)
         {
             data = value;
             next = null;
-
+            previous = null;
         }
     }
 
@@ -53,7 +57,7 @@ namespace Tasks
     {
         public Node<T> head;
         public Node<T> temp;
-        public Node<T> EnumerateNode;
+        public Node<T> EnumerateNode { get; set; }
         public DoublyLinkedList()
         {
             temp = head;
@@ -76,7 +80,13 @@ namespace Tasks
             }
             return cnt;
         }
-
+        public void enumarate()
+        {
+            /*Node<T> last = head;
+            while (last.next != null)
+                last = last.next;*/
+            EnumerateNode = head;
+        }
         public void Add(T e)
         {
             Node<T> node = new Node<T>(e);
@@ -89,8 +99,12 @@ namespace Tasks
             Node<T> last = head;
             while (last.next != null)           
                 last = last.next;
+            
             last.next = node;
-           
+            node.previous = last;
+            enumarate();
+
+
         }
 
         public void AddAt(int index, T e)
@@ -102,7 +116,9 @@ namespace Tasks
             if(index == 0)
             {
                 node.next = head;
+                head.previous = node;
                 head = node;
+                enumarate();
                 return;
             }
             int cnt = 1;
@@ -118,6 +134,7 @@ namespace Tasks
                 throw new IndexOutOfRangeException();
             }
             node.next = temp;
+            node.previous = previousNode;
             previousNode.next = node;
            
         }
@@ -140,6 +157,7 @@ namespace Tasks
             {
                 throw new IndexOutOfRangeException();
             }
+            
             return temp.data;
         }
 
@@ -151,6 +169,8 @@ namespace Tasks
             if (head.data.Equals(item))
             {
                 head = head.next;
+                head.previous = null;
+                enumarate();
                 return;
             }
             while ( temp != null && !temp.data.Equals(item))
@@ -161,8 +181,9 @@ namespace Tasks
             if(temp != null && temp.data.Equals(item))
             {
                 previousNode.next = temp.next;
+                temp.previous = previousNode;
             }
-            temp = head;
+            enumarate();
         }
 
         public T RemoveAt(int index)
@@ -180,6 +201,8 @@ namespace Tasks
             {
                 data = temp.data;
                 temp = temp.next;
+                temp.previous = null;
+                enumarate();
                 return data;
             }
              
@@ -192,13 +215,17 @@ namespace Tasks
             Node<T> next = temp.next;
             data = temp.data;
             previousNode.next = next;
-            temp = head;
+            if(next != null)
+            {
+                next.previous = previousNode;
+            }
+           
             return data;
 
         }
         public IEnumerator<T> GetEnumerator()
         {
-            return new LinkedListEnumerator<T>(temp);
+            return new LinkedListEnumerator<T>(EnumerateNode);
         }
 
 

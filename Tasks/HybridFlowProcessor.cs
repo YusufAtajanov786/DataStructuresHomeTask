@@ -4,29 +4,17 @@ using Tasks.DoNotChange;
 namespace Tasks
 {
 
-    public class DoubleNode<T>
-    {
-        public T data { get; }
-        public DoubleNode<T> next { get; set; }
-        public DoubleNode<T> previous { get; set; }
-
-        public DoubleNode(T value)
-        {
-            data = value;
-            next = null;
-            previous = null;
-        }
-    }
+    
     public class HybridFlowProcessor<T> : IHybridFlowProcessor<T>
     {
-        public DoubleNode<T> head;
+        public Node<T> head;
 
         public T Dequeue()
         {
             if (head == null)
                 throw new InvalidOperationException();
-            DoubleNode<T> last = head;
-            DoubleNode<T> previous = head;
+            Node<T> last = head;
+            Node<T> previous = head;
             T data;
             while (last.next != null)
             {
@@ -40,7 +28,7 @@ namespace Tasks
 
         public void Enqueue(T item)
         {
-            DoubleNode<T> node = new DoubleNode<T>(item);
+            Node<T> node = new Node<T>(item);
             
             if(head == null)
             {
@@ -60,8 +48,8 @@ namespace Tasks
                 throw new InvalidOperationException();
             }
 
-            DoubleNode<T> last = head;
-            DoubleNode<T> previous = head;
+            Node<T> last = head;
+            Node<T> previous = head;
             T data ;
             while (last.next != null)
             {
@@ -75,14 +63,14 @@ namespace Tasks
 
         public void Push(T item)
         {
-            DoubleNode<T> node = new DoubleNode<T>(item);
+            Node<T> node = new Node<T>(item);
             if(head == null)
             {
                 head = node;
                 return;
             }
             node.next = null;
-            DoubleNode<T> last = head;
+            Node<T> last = head;
             while (last.next != null)
             {
                 last = last.next;
