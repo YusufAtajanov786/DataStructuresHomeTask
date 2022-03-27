@@ -12,9 +12,7 @@ namespace Tasks
         private int preserverFromIncreseindex = 0;
         public LinkedListEnumerator(Node<T> current)
         {
-            this.current = current;
-            
-            
+            this.current = current;        
         }
 
         public T Current => current.data;
@@ -57,18 +55,15 @@ namespace Tasks
     {
         public Node<T> head;
         public Node<T> temp;
-        public Node<T> EnumerateNode { get; set; }
+      
         public DoublyLinkedList()
         {
-            temp = head;
-            EnumerateNode = head;
+            
         }
        
 
         public int Length => Count();
-
-      
-
+        
         public int Count()
         {
             int cnt = 0;
@@ -80,13 +75,8 @@ namespace Tasks
             }
             return cnt;
         }
-        public void enumarate()
-        {
-            /*Node<T> last = head;
-            while (last.next != null)
-                last = last.next;*/
-            EnumerateNode = head;
-        }
+       
+
         public void Add(T e)
         {
             Node<T> node = new Node<T>(e);
@@ -101,10 +91,7 @@ namespace Tasks
                 last = last.next;
             
             last.next = node;
-            node.previous = last;
-            enumarate();
-
-
+            node.previous = last;           
         }
 
         public void AddAt(int index, T e)
@@ -117,8 +104,7 @@ namespace Tasks
             {
                 node.next = head;
                 head.previous = node;
-                head = node;
-                enumarate();
+                head = node;              
                 return;
             }
             int cnt = 1;
@@ -169,8 +155,7 @@ namespace Tasks
             if (head.data.Equals(item))
             {
                 head = head.next;
-                head.previous = null;
-                enumarate();
+                head.previous = null;               
                 return;
             }
             while ( temp != null && !temp.data.Equals(item))
@@ -183,7 +168,7 @@ namespace Tasks
                 previousNode.next = temp.next;
                 temp.previous = previousNode;
             }
-            enumarate();
+          
         }
 
         public T RemoveAt(int index)
@@ -201,8 +186,7 @@ namespace Tasks
             {
                 data = temp.data;
                 temp = temp.next;
-                temp.previous = null;
-                enumarate();
+                temp.previous = null;              
                 return data;
             }
              
@@ -225,7 +209,7 @@ namespace Tasks
         }
         public IEnumerator<T> GetEnumerator()
         {
-            return new LinkedListEnumerator<T>(EnumerateNode);
+            return new LinkedListEnumerator<T>(head);
         }
 
 
